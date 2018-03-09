@@ -26,8 +26,8 @@ public class GameWindow extends JFrame {
                 gameCanvas.players.y = e.getY();
                 if (e.getX() < 0) gameCanvas.players.x = 0;
                 if (e.getY() < 0) gameCanvas.players.y = 0;
-                if (e.getX() > 400) gameCanvas.players.x = 400;
-                if (e.getY() > 600) gameCanvas.players.y = 600;
+                if (e.getX() > 400) gameCanvas.players.x = 360;
+                if (e.getY() > 600) gameCanvas.players.y = 560;
             }
         });
     }

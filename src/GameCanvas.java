@@ -1,46 +1,29 @@
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.Random;
-import java.util.Vector;
 
 public class GameCanvas extends JPanel {
 
     BufferedImage background;
     BufferedImage straight;
-    Vector<Square> squareVector;
     BufferedImage backBuffer;
 
-
     Player players;
-    MediumSquare mediumSquare = new MediumSquare();
-    Vector<Bullet> vectorBullet;
-    Vector<MediumSquare> vectorMediumSquares;
-    Vector<MediumSquareBullet> vectorMediumSquareBullet;
+    Graphics graphics;
 
     int countSquare = 0;
     int countBullet = 0;
-    int countMediumSquare = 0;
-    int countEnemyBullet = 0;
-
 
     Random random = new Random();
-
-    Graphics graphics;
-
 
     public GameCanvas() {
         this.setUpGameCanvas();
         this.setUpBackBuffed();
         this.setUpBackGround();
         this.setUpPlayer();
-        this.squareVector = new Vector<>();
-        this.vectorBullet = new Vector<>();
-        this.vectorMediumSquares = new Vector<>();
-        this.vectorMediumSquareBullet = new Vector<>();
+        GameObject.add(new EnemySquawner());
+        GameObject.add(new SquareSpawner());
 
     }
 
@@ -55,23 +38,17 @@ public class GameCanvas extends JPanel {
     }
 
     private void setUpBackGround() {
-        try {
-            this.background = ImageIO.read(new File("resources/background/background.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        GameObject.add(new BackGround());
     }
 
     private void setUpPlayer() {
-        try {
-            this.players = new Player(ImageIO.read(new File("resources/player/straight.png")), 0, 0);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        this.players = new Player();
+        this.players.x = 200;
+        this.players.y = 300;
+        GameObject.add(players);
     }
 
     @Override
-
     protected void paintComponent(Graphics g) {
         //Draw bach buffer - draw lop de co the xep chong len
         g.drawImage(this.backBuffer, 0, 0, null);
@@ -79,83 +56,44 @@ public class GameCanvas extends JPanel {
 
 
     public void runAll() {
-        this.runSquare();
-        this.runBullet();
-        this.runMediumSquare();
-        this.runEnemyBullet();
+        GameObject.runAll();
     }
 
-
-    private void runMediumSquare() {
-        if (this.countMediumSquare > 200) {
-            try {
-                int c = random.nextInt(400);
-                MediumSquare mediumSquare = new MediumSquare(ImageIO.read(new File("resources/square/enemy_square_medium.png")), c, 0, 0, 2);
-                this.vectorMediumSquares.add(mediumSquare);
-                this.countMediumSquare = 0;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else {
-            this.countMediumSquare += 1;
-        }
-        this.vectorMediumSquares.forEach(mediumSquare -> mediumSquare.run());
+    private void runSquares() {
+        this.creatSquare();
     }
 
-    private void runEnemyBullet() {
-        for (MediumSquare mediumSquare : vectorMediumSquares) {
-            if (this.countEnemyBullet > 200) {
-                try {
-                    MediumSquareBullet mediumSquareBullet = new MediumSquareBullet(ImageIO.read(new File("resources/square/enemy_square_bullet.png")), mediumSquare.getX(), 0, 0, 3);
-                    this.vectorMediumSquareBullet.add(mediumSquareBullet);
-                    this.countEnemyBullet = 0;
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                this.countEnemyBullet += 1;
-            }
-            this.vectorMediumSquareBullet.forEach(mediumSquareBullet -> mediumSquareBullet.run());
-        }
-    }
-
-    private void runSquare() {
-        if (this.countSquare >= 600) {
-            try {
-                Square square = new Square(ImageIO.read(new File("resources/square/enemy_square_small.png")), 0, 0, 0, 1);
-                this.squareVector.add(square);
-                this.countSquare = 0;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+    private void creatSquare() {
+        if (this.countSquare >= 30) {
+            Square square = new Square();
+            square.x = 20;
+            square.vy = 3;
+            this.countSquare = 0;
+            GameObject.add(square);
         } else {
             this.countSquare += 1;
         }
-        this.squareVector.forEach(square -> square.run());
     }
 
-    private void runBullet() {
+    private void creatBullet() {
         if (this.countBullet >= 15) {
-            try {
-                Bullet bullet = new Bullet(ImageIO.read(new File("resources/player/player_bullet.png")), players.x, players.y, 0, 5);
-                this.vectorBullet.add(bullet);
-                this.countBullet = 0;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            Bullet bullet = new Bullet();
+            bullet.x = this.players.x;
+            bullet.y = this.players.y;
+            this.countBullet = 0;
+            GameObject.add(bullet);
         } else {
             this.countBullet += 1;
         }
-        this.vectorBullet.forEach(bullet -> bullet.run());
+    }
+
+    private void runBullets() {
+        this.creatBullet();
     }
 
     public void renderAll() {
         this.graphics.drawImage(this.background, 0, 0, null);
-        this.players.render(graphics);
-        this.vectorBullet.forEach(bullet -> bullet.render(graphics));
-        this.squareVector.forEach(square -> square.render(graphics));
-        this.vectorMediumSquares.forEach(mediumSquare -> mediumSquare.render(graphics));
-        this.vectorMediumSquareBullet.forEach((mediumSquareBullet -> mediumSquareBullet.render(graphics)));
+        GameObject.renderAll(this.graphics);
         this.repaint();
     }
 

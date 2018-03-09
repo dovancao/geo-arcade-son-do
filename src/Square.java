@@ -1,29 +1,37 @@
-import java.awt.*;
-import java.awt.image.BufferedImage;
 
-public class Square {
-    public BufferedImage images;
-    public int x;
-    public int y;
+public class Square extends GameObject {
     public int vx;
     public int vy;
 
-    public Square(BufferedImage images, int x, int y, int vx, int vy) {
-        this.images = images;
-        this.x = x;
-        this.y = y;
+
+    public Square(int vx, int vy, int x, int y) {
         this.vx = vx;
         this.vy = vy;
+        this.x = x;
+        this.y = y;
     }
 
+    public Square() {
+        this.image = Utils.loadImage("resources/square/enemy_square_small.png");
+    }
+
+    @Override
     public void run() {
-        this.x += vx;
-        this.y += vy;
+        super.run();// gọi lại method của thằng cha, nếu không có super run() thì không gọi thằng cha , và không ghi đè
+        this.x += this.vx;
+        this.y += this.vy;
+        movingSquareMatric();
     }
 
-    public void render(Graphics graphics) {
-        graphics.drawImage(this.images, x, y, null);
+    private void movingSquareMatric() {
+        if (this.y < 400) {
+            this.vy = 1;
+            this.vx = 1;
+        }
+        if (this.y > 400) {
+            this.vy = 1;
+            this.vx = -1;
+        }
     }
-
-
+    
 }
