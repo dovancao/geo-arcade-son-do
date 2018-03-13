@@ -1,16 +1,18 @@
 public class Bullet extends GameObject {
-    int vx;
-    int vy;
+    public Vector2D velocity;
+    private BoxCollider boxCollider;
 
     public Bullet() {
+        this.boxCollider = new BoxCollider(10, 10);
         this.image = Utils.loadImage("resources/player/player_bullet.png");
+        this.velocity = new Vector2D();
+        this.boxCollider = new BoxCollider(10, 10);
     }
 
     @Override
     public void run() {
         super.run();
-        this.x += vx;
-        this.y += vy;
+        this.position.addUp(this.velocity);
     }
 
 }

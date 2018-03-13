@@ -4,8 +4,7 @@ import java.util.Vector;
 
 public class GameObject {
     BufferedImage image;
-    int x;
-    int y;
+    public Vector2D position;
 
     private static Vector<GameObject> vector = new Vector<>();
     private static Vector<GameObject> temp = new Vector<>();
@@ -24,8 +23,7 @@ public class GameObject {
         vector.forEach(gameObject -> gameObject.render(graphics));
     }
 
-    public void bounceBack() {
-    }
+
 
     public GameObject() {
     }
@@ -35,7 +33,7 @@ public class GameObject {
 
     public void render(Graphics graphics) {
         if (this.image != null) {
-            graphics.drawImage(this.image, x, y, null);
+            graphics.drawImage(this.image, (int) this.position.x - this.image.getWidth() / 2, (int) this.position.y - this.image.getHeight() / 2, null);
         }
     }
 }

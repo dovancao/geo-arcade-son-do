@@ -1,16 +1,13 @@
 public class EnemyShoot {
     private int count = 0;
+    private FrameCounter frameCounter = new FrameCounter(10);
 
     public void run(MediumSquare mediumSquare) {
-        if (this.count >= 10) {
+        if (this.frameCounter.run()) {
             MediumSquareBullet mediumSquareBullet = new MediumSquareBullet();
-            mediumSquareBullet.x = mediumSquare.x;
-            mediumSquareBullet.y = mediumSquare.y;
-            mediumSquareBullet.vy = 7;
+            mediumSquareBullet.position.set(mediumSquare.position);
+            mediumSquareBullet.velocity.set(0, 6);
             GameObject.add(mediumSquareBullet);
-            this.count = 0;
-        } else {
-            this.count += 1;
         }
     }
 }

@@ -1,24 +1,19 @@
 public class MediumSquare extends GameObject {
 
-    public int vx;
-    public int vy;
-
     private EnemyShoot enemyShoot;
-
-    private int countBullet;
-
+    public Vector2D velocity;
 
     public MediumSquare() {
         this.image = Utils.loadImage("resources/square/enemy_square_medium.png");
         this.enemyShoot = new EnemyShoot();
+        this.velocity = new Vector2D();
     }
 
 
     @Override
     public void run() {
         super.run();
-        this.x += vx;
-        this.y += vy;
+        this.position.addUp(this.velocity);
         this.enemyShoot.run(this);
     }
 

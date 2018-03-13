@@ -1,33 +1,29 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.Random;
+
 
 public class GameCanvas extends JPanel {
 
-    BufferedImage background;
-    BufferedImage straight;
-    BufferedImage backBuffer;
-
     Player players;
+    BufferedImage backBuffer;
     Graphics graphics;
 
-    int countSquare = 0;
-    int countBullet = 0;
-
-    Random random = new Random();
-
     public GameCanvas() {
-        this.setUpGameCanvas();
+        this.setUp();
         this.setUpBackBuffed();
         this.setUpBackGround();
         this.setUpPlayer();
         GameObject.add(new EnemySquawner());
         GameObject.add(new SquareSpawner());
-
+        MatricSquare matricSquare = new MatricSquare();
+        matricSquare.position.set(20, 20);
+        matricSquare.velocity.set(3, 0);
+        matricSquare.creat();
+        GameObject.add(matricSquare);
     }
 
-    private void setUpGameCanvas() {
+    private void setUp() {
         this.setSize(400, 600);
         this.setVisible(true);
     }
@@ -38,14 +34,15 @@ public class GameCanvas extends JPanel {
     }
 
     private void setUpBackGround() {
-        GameObject.add(new BackGround());
+        BackGround backGround = new BackGround();
+        backGround.position.set(200, 300);
+        GameObject.add(backGround);
     }
 
     private void setUpPlayer() {
         this.players = new Player();
-        this.players.x = 200;
-        this.players.y = 300;
-        GameObject.add(players);
+        this.players.position.set(200, 300);
+        GameObject.add(this.players);
     }
 
     @Override
@@ -59,40 +56,39 @@ public class GameCanvas extends JPanel {
         GameObject.runAll();
     }
 
-    private void runSquares() {
-        this.creatSquare();
-    }
-
-    private void creatSquare() {
-        if (this.countSquare >= 30) {
-            Square square = new Square();
-            square.x = 20;
-            square.vy = 3;
-            this.countSquare = 0;
-            GameObject.add(square);
-        } else {
-            this.countSquare += 1;
-        }
-    }
-
-    private void creatBullet() {
-        if (this.countBullet >= 15) {
-            Bullet bullet = new Bullet();
-            bullet.x = this.players.x;
-            bullet.y = this.players.y;
-            this.countBullet = 0;
-            GameObject.add(bullet);
-        } else {
-            this.countBullet += 1;
-        }
-    }
-
-    private void runBullets() {
-        this.creatBullet();
-    }
+//    private void runSquares() {
+//        this.creatSquare();
+//    }
+//
+//    private void creatSquare() {
+//        if (this.countSquare >= 30) {
+//            Square square = new Square();
+//            square.x = 20;
+//            square.vy = 3;
+//            this.countSquare = 0;
+//            GameObject.add(square);
+//        } else {
+//            this.countSquare += 1;
+//        }
+//    }
+//
+//    private void creatBullet() {
+//        if (this.countBullet >= 15) {
+//            Bullet bullet = new Bullet();
+//            bullet.x = this.players.x;
+//            bullet.y = this.players.y;
+//            this.countBullet = 0;
+//            GameObject.add(bullet);
+//        } else {
+//            this.countBullet += 1;
+//        }
+//    }
+//
+//    private void runBullets() {
+//        this.creatBullet();
+//    }
 
     public void renderAll() {
-        this.graphics.drawImage(this.background, 0, 0, null);
         GameObject.renderAll(this.graphics);
         this.repaint();
     }

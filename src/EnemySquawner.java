@@ -11,11 +11,11 @@ public class EnemySquawner extends GameObject {
 
     @Override
     public void run() {
+        super.run();
         if (this.count > 200) {
-            int c = random.nextInt(400);
             MediumSquare mediumSquare = new MediumSquare();
-            mediumSquare.x = this.random.nextInt(400);
-            mediumSquare.vy = this.random.nextInt(3);
+            mediumSquare.position.set(random.nextInt(400), 0);
+            mediumSquare.velocity.set(0, random.nextInt(3) + 1);
             GameObject.add(mediumSquare);
             this.count = 0;
 

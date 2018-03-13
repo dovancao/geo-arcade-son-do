@@ -9,28 +9,20 @@ public class GameWindow extends JFrame {
 
     GameCanvas gameCanvas;
     private long lastTime = 0;
+    public String name;
 
     public GameWindow() {
         this.setup();
         this.setupCanvas();
-        this.windowListener();
-        ;
         this.listener();
+        this.setVisible(true);
     }
 
     private void listener() {
-        this.addMouseMotionListener(new MouseAdapter() {
-            @Override
-            public void mouseMoved(MouseEvent e) {
-                gameCanvas.players.x = e.getX();
-                gameCanvas.players.y = e.getY();
-                if (e.getX() < 0) gameCanvas.players.x = 0;
-                if (e.getY() < 0) gameCanvas.players.y = 0;
-                if (e.getX() > 400) gameCanvas.players.x = 360;
-                if (e.getY() > 600) gameCanvas.players.y = 560;
-            }
-        });
+        this.mouseMotionListener();
+        this.windowListener();
     }
+
 
     private void setup() {
         this.setSize(400, 600);
@@ -48,9 +40,29 @@ public class GameWindow extends JFrame {
                 System.exit(1);
             }
         });
-        this.setVisible(true); // set cho cua so hien thi
     }
 
+    private void mouseMotionListener() {
+        this.addMouseMotionListener(new MouseAdapter() {
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                if (e.getX() > 0 && e.getY() < 400 - 40) {
+                    gameCanvas.players.position.x = e.getX();
+                } else if (e.getX() < 0) {
+                    gameCanvas.players.position.x = 0;
+                } else {
+                    gameCanvas.players.position.x = 400 - 40;
+                }
+                if (e.getY() > 0 && e.getY() < 600 - 40) {
+                    gameCanvas.players.position.y = e.getY();
+                } else if (e.getY() < 0) {
+                    gameCanvas.players.position.y = 0;
+                } else {
+                    gameCanvas.players.position.y = 600 - 40;
+                }
+            }
+        });
+    }
 
     public void gameLoop() {
         while (true) {
@@ -62,6 +74,4 @@ public class GameWindow extends JFrame {
             }
         }
     }
-
-
 }
